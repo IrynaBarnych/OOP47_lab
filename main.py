@@ -42,6 +42,14 @@ class RecordTable:
             print("Невірний логін або пароль.")
             return False
 
+    def add_record(self, score):
+        if hasattr(self, 'current_user'):
+            key = f"leaderboard:{self.current_user}"
+            self.redis_client.zadd(key, {self.current_user: score})
+            print(f"Рекорд {score} додано до таблиці рекордів.")
+        else:
+            print("Спочатку увійдіть у таблицю рекордів.")
+
 # Приклад використання
 record_table_app = RecordTable()
 
