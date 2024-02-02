@@ -107,6 +107,20 @@ class RecordTable:
         else:
             print("Спочатку увійдіть у таблицю рекордів.")
 
+    def view_top_scores(self):
+        if hasattr(self, 'current_user'):
+            key = f"leaderboard:{self.current_user}"
+            top_scores = self.redis_client.zrevrangebyscore(key, '+inf', '-inf', start=0, num=10,
+                                                            withscores=True)
+            if top_scores:
+                print("Найкращі десять результатів:")
+                for rank, (user, score) in enumerate(top_scores, start=1):
+                    print(f"{rank}. {user}: {score}")
+            else:
+                print("Таблиця рекордів порожня.")
+        else:
+            print("Спочатку увійдіть у таблицю рекордів.")
+
 # Приклад використання
 record_table_app = RecordTable()
 
