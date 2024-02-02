@@ -94,6 +94,19 @@ class RecordTable:
         else:
             print("Спочатку увійдіть у таблицю рекордів.")
 
+    def view_leaderboard(self):
+        if hasattr(self, 'current_user'):
+            key = f"leaderboard:{self.current_user}"
+            leaderboard = self.redis_client.zrange(key, 0, -1, withscores=True)
+            if leaderboard:
+                print("Вміст таблиці рекордів:")
+                for user, score in leaderboard:
+                    print(f"{user}: {score}")
+            else:
+                print("Таблиця рекордів порожня.")
+        else:
+            print("Спочатку увійдіть у таблицю рекордів.")
+
 # Приклад використання
 record_table_app = RecordTable()
 
