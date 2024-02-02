@@ -50,14 +50,31 @@ class RecordTable:
         else:
             print("Спочатку увійдіть у таблицю рекордів.")
 
+    def add_record(self, score):
+        if hasattr(self, 'current_user'):
+            key = f"leaderboard:{self.current_user}"
+            self.redis_client.zadd(key, {self.current_user: score})
+            print(f"Рекорд {score} додано до таблиці рекордів.")
+        else:
+            print("Спочатку увійдіть у таблицю рекордів.")
+
+    def remove_record(self, score):
+        if hasattr(self, 'current_user'):
+            key = f"leaderboard:{self.current_user}"
+            self.redis_client.zremrangebyscore(key, score, score)
+            print(f"Рекорд {score} видалено з таблиці рекордів.")
+        else:
+            print("Спочатку увійдіть у таблицю рекордів.")
+
 # Приклад використання
 record_table_app = RecordTable()
 
 # Реєстрація та логін користувача
 if record_table_app.register_user("user6", "122"):
     if record_table_app.login("user6", "122"):
-        # Додавання рекорду
+        # Додавання та видалення результатів користувача з таблиці рекордів
         record_table_app.add_record(100)
         record_table_app.add_record(150)
+        record_table_app.remove_record(100)
 
 
