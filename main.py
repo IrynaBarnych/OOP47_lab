@@ -66,6 +66,15 @@ class RecordTable:
         else:
             print("Спочатку увійдіть у таблицю рекордів.")
 
+    def update_record(self, old_score, new_score):
+        if hasattr(self, 'current_user'):
+            key = f"leaderboard:{self.current_user}"
+            self.redis_client.zremrangebyscore(key, old_score, old_score)
+            self.redis_client.zadd(key, {self.current_user: new_score})
+            print(f"Рекорд {old_score} оновлено до {new_score} в таблиці рекордів.")
+        else:
+            print("Спочатку увійдіть у таблицю рекордів.")
+
 # Приклад використання
 record_table_app = RecordTable()
 
@@ -76,5 +85,6 @@ if record_table_app.register_user("user6", "122"):
         record_table_app.add_record(100)
         record_table_app.add_record(150)
         record_table_app.remove_record(100)
+        record_table_app.update_record(100, 120)
 
 
