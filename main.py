@@ -83,6 +83,17 @@ class RecordTable:
         else:
             print("Спочатку увійдіть у таблицю рекордів.")
 
+    def search_record(self, score):
+        if hasattr(self, 'current_user'):
+            key = f"leaderboard:{self.current_user}"
+            rank = self.redis_client.zrank(key, self.current_user)
+            if rank is not None:
+                print(f"Рекорд користувача {self.current_user} у таблиці рекордів: {score}")
+            else:
+                print(f"Користувач {self.current_user} відсутній у таблиці рекордів.")
+        else:
+            print("Спочатку увійдіть у таблицю рекордів.")
+
 # Приклад використання
 record_table_app = RecordTable()
 
@@ -97,5 +108,8 @@ if record_table_app.register_user("user6", "122"):
 
         # Повне очищення таблиці рекордів
         record_table_app.clear_leaderboard()
+
+        # Пошук рекордів користувача у таблиці рекордів
+        record_table_app.search_record(100)
 
 
