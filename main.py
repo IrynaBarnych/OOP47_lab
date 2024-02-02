@@ -75,6 +75,14 @@ class RecordTable:
         else:
             print("Спочатку увійдіть у таблицю рекордів.")
 
+    def clear_leaderboard(self):
+        if hasattr(self, 'current_user'):
+            key = f"leaderboard:{self.current_user}"
+            self.redis_client.delete(key)
+            print("Таблицю рекордів очищено.")
+        else:
+            print("Спочатку увійдіть у таблицю рекордів.")
+
 # Приклад використання
 record_table_app = RecordTable()
 
@@ -86,5 +94,8 @@ if record_table_app.register_user("user6", "122"):
         record_table_app.add_record(150)
         record_table_app.remove_record(100)
         record_table_app.update_record(100, 120)
+
+        # Повне очищення таблиці рекордів
+        record_table_app.clear_leaderboard()
 
 
